@@ -1,2 +1,1 @@
-# fcc-urlshortener
-Repository holding my fcc url shortener project
+#Readme to be written soon.
