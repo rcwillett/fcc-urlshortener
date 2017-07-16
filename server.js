@@ -17,9 +17,34 @@ app.get("/", function (request, response) {
 app.get("/:urlToShorten(*)", function (request, response) {
   var urlToShorten = request.params.urlToShorten;
   var urlRegExpCheck = '^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|)';
-  var onlyNumCheck = '[^\d]';
+  var onlyNumCheck = '[^0-9]';
   console.log(urlToShorten);
-  if(urlToShorten.match(urlRegExpCheck)){
+  if(!urlToShorten.match(onlyNumCheck)){
+    console.log("got to only num")
+    MongoClient.connect(dbUrl, function (err, db) {
+      if (err) {
+        sendError(err)
+        //console.log('Unable to connect to the mongoDB server. Error:', err);
+      }
+      else {
+        console.log('Connection established to', dbUrl);
+    
+        var shortenedUrlCollection = db.collection("shortened_urls");
+        var urlShortenInt = parseInt(urlToShorten);
+        shortenedUrls = shortenedUrlCollection.findOne({shortenedUrl : urlShortenInt});
+        shortenedUrls.then(function(queryResult){
+            if(queryResult){
+              response.redirect(queryResult.url);
+              db.close();
+            }
+            else{
+              sendError(response, "shortenedUrl entry not found! Please try again.")
+            }
+        });
+      }
+    });
+  }
+  else if(urlToShorten.match(urlRegExpCheck)){
     var result = {
       originalUrl: urlToShorten,
       shortenedUrl: ""
@@ -41,9 +66,6 @@ app.get("/:urlToShorten(*)", function (request, response) {
       }
     });
     
-  }
-  else if(!urlToShorten.match(onlyNumCheck)){
-    sendError("Not Supporting Redirection");
   }
   else{
     sendError("Invalid Url");
