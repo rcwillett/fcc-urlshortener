@@ -11,20 +11,39 @@
 <html>
   <head>
     <title>Willitt's fcc url shortening microservice</title>
-    <meta name="description" content="Shortens urls n' stuf">
+    <meta name="description" content="Microservice used to shorten urls provided to it and to redirect users to the desired url given a short url">
     <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   </head>
   <body>
-    <header>
-      <h1>
-        Body to be written...
-      </h1>
-    </header>
-
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 text-left">
+          <h1>
+            Willitt's url shortening microservice
+          </h1>
+          <p>
+            Welcome to my simplistic url shortening microservice. To use this service, simply append "/" and the url of the site you would like to
+            have a shortened url for. (e.g. https://fcc-urlshortenerservice.glitch.me/https://www.facebook.com) This will return a json object of the following form:
+          </p>
+          <p>
+            {<br />"originalUrl" : "<span class="text-success">(Your Valid Url)</span>",<br />"shortenedUrl" : "<span class="text-success">(Shortened Version of Valid Url)</span>"<br />}          
+          </p>
+          <p>
+            Should you navigate to the shortened url you will be redirected to the original url.
+          </p>
+          <h2>
+            Limitations:
+          </h2>
+          <p>
+            Note that for the purposes of this task the urls that are considered valid for this service are those that follow a structure of Protocol:Domain. No ip addresses or other unusual urls will be accepted by the application
+          </p>
+        </div>
+      </div>
+    </div>    
     <footer>
     </footer>
 

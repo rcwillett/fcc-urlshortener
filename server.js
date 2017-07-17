@@ -18,16 +18,12 @@ app.get("/:urlToShorten(*)", function (request, response) {
   var urlToShorten = request.params.urlToShorten;
   var urlRegExpCheck = '^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|)';
   var onlyNumCheck = '[^0-9]';
-  console.log(urlToShorten);
   if(!urlToShorten.match(onlyNumCheck)){
-    console.log("got to only num")
     MongoClient.connect(dbUrl, function (err, db) {
       if (err) {
         sendError(err)
-        //console.log('Unable to connect to the mongoDB server. Error:', err);
       }
       else {
-        console.log('Connection established to', dbUrl);
     
         var shortenedUrlCollection = db.collection("shortened_urls");
         var urlShortenInt = parseInt(urlToShorten);
@@ -53,11 +49,8 @@ app.get("/:urlToShorten(*)", function (request, response) {
     MongoClient.connect(dbUrl, function (err, db) {
       if (err) {
         sendError(err)
-        //console.log('Unable to connect to the mongoDB server. Error:', err);
       }
-      else {
-        console.log('Connection established to', dbUrl);
-    
+      else {    
         var shortenedUrlCollection = db.collection("shortened_urls");
         shortenedUrls = shortenedUrlCollection.findOne({url : urlToShorten});
         shortenedUrls.then(function(queryResult){
@@ -73,7 +66,7 @@ app.get("/:urlToShorten(*)", function (request, response) {
 });
 
 var listener = app.listen(process.env.PORT, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
+  //console.log('Your app is listening on port ' + listener.address().port);
 });
 
 function handleEntryResults(db, shortenedUrlCollection, shortenedUrls, response, result, urlToShorten){
@@ -89,11 +82,9 @@ function handleEntryResults(db, shortenedUrlCollection, shortenedUrls, response,
 
 function addEntryToDB(db, shortenedUrlCollection, response, result, urlToShorten, newId){
     shortenedUrlCollection.count({}).then(function(lastId){
-    console.log(lastId);
     var newId = lastId++;
     shortenedUrlCollection.insert(new shortenedUrlEntry(urlToShorten, newId), function(err, docsInserted){
       if(!err){
-        console.log(docsInserted.insertedIds[0], typeof(docsInserted));
         result.shortenedUrl = baseShortenerUrl + newId;
         response.send(result);
       }
