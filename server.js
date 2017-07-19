@@ -16,9 +16,7 @@ app.get("/", function (request, response) {
 
 app.get("/:urlToShorten(*)", function (request, response) {
   var urlToShorten = request.params.urlToShorten;
-  var urlRegExpCheck = '^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|)';
-  var onlyNumCheck = '[^0-9]';
-  if(!urlToShorten.match(onlyNumCheck)){
+  if(!/\D/.test(urlToShorten)){
     MongoClient.connect(dbUrl, function (err, db) {
       if (err) {
         sendError(err)
@@ -40,7 +38,7 @@ app.get("/:urlToShorten(*)", function (request, response) {
       }
     });
   }
-  else if(urlToShorten.match(urlRegExpCheck)){
+  else if(/^https?:\/\/(([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}$/.test(urlToShorten)){
     var result = {
       originalUrl: urlToShorten,
       shortenedUrl: ""
@@ -61,7 +59,7 @@ app.get("/:urlToShorten(*)", function (request, response) {
     
   }
   else{
-    sendError("Invalid Url");
+    sendError(response, "Invalid Url");
   }
 });
 
