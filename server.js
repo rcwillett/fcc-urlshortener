@@ -5,7 +5,7 @@ var express = require('express');
 var app = express();
 var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
-var dbUrl = 'mongodb://Big_Willy:Fedora20@ds028310.mlab.com:28310/url_shortener';
+var dbUrl = process.env.DBURL;
 var baseShortenerUrl = "https://fcc-urlshortenerservice.glitch.me/";
 
 app.use(express.static('public'));
